@@ -103,7 +103,7 @@ def decode_packet(transmittedPacket, num_linhas, num_colunas):
         ##
         for lin in range(num_linhas):
             for col in range(num_colunas):
-                parityMatrix[lin][col] = transmittedPacket[block_offset + x * lin + col]
+                parityMatrix[lin][col] = transmittedPacket[block_offset + num_linhas * lin + col]
 
         ##
         # Bits de paridade das colunas.
@@ -115,7 +115,7 @@ def decode_packet(transmittedPacket, num_linhas, num_colunas):
         # Bits de paridade das linhas.
         ##
         for lin in range(num_linhas):
-            parityRows[lin] = transmittedPacket[block_offset + (num_linhas * num_colunas + num_linhas) + lin]
+            parityRows[lin] = transmittedPacket[block_offset + (num_linhas * num_colunas + num_colunas) + lin]
 
         ##
         # Verificacao dos bits de paridade: colunas.
@@ -142,7 +142,7 @@ def decode_packet(transmittedPacket, num_linhas, num_colunas):
         errorInRow = -1
         for lin in range(num_linhas):
             sub_total = 0
-            for col in range(x):
+            for col in range(num_colunas):
                 sub_total += parityMatrix[lin][col]
 
             if sub_total % 2 != parityRows[lin]:
@@ -164,7 +164,7 @@ def decode_packet(transmittedPacket, num_linhas, num_colunas):
         ##
         for lin in range(num_linhas):
             for col in range(num_colunas):
-                decodedPacket[(x * y) * block_index + x * lin + col] = parityMatrix[lin][col]
+                decodedPacket[(num_linhas * num_colunas) * block_index + num_linhas * lin + col] = parityMatrix[lin][col]
 
         ##
         # Incrementar numero de bytes na saida.
@@ -310,11 +310,11 @@ random.seed()
 # Geracao do pacote original aleatorio.
 ##
 
-x = int(sys.argv[4])
-y = int(sys.argv[5])
+num_linhas = int(sys.argv[4])
+num_colunas = int(sys.argv[5])
 
 originalPacket = generateRandomPacket(packet_length)
-codedPacket = code_packet(originalPacket, x, y)
+codedPacket = code_packet(originalPacket, num_linhas, num_colunas)
 
 start_time = time.time()
 
@@ -332,7 +332,7 @@ for i in range(reps):
     ##
     # Gerar versao decodificada do pacote.
     ##
-    decodedPacket = decode_packet(transmittedPacket, x, y)
+    decodedPacket = decode_packet(transmittedPacket, num_linhas, num_colunas)
 
     ##
     # Contar erros.
