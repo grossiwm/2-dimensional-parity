@@ -94,7 +94,7 @@ def decode_packet(transmittedPacket, num_linhas, num_colunas):
     block_index = 0 # Contador de bytes no pacote decodificado.
 
     ##
-    # Itera por cada sequencia de 14 bits (8 de dados + 6 de paridade).
+    # Itera por cada sequencia de bits de dados + bits de paridade.
     ##
     for block_offset in range(0, len(transmittedPacket), (num_linhas * num_colunas + num_linhas + num_colunas)):
 
@@ -103,7 +103,7 @@ def decode_packet(transmittedPacket, num_linhas, num_colunas):
         ##
         for lin in range(num_linhas):
             for col in range(num_colunas):
-                parityMatrix[lin][col] = transmittedPacket[block_offset + num_linhas * lin + col]
+                parityMatrix[lin][col] = transmittedPacket[block_offset + num_colunas * lin + col]
 
         ##
         # Bits de paridade das colunas.
@@ -164,7 +164,7 @@ def decode_packet(transmittedPacket, num_linhas, num_colunas):
         ##
         for lin in range(num_linhas):
             for col in range(num_colunas):
-                decodedPacket[(num_linhas * num_colunas) * block_index + num_linhas * lin + col] = parityMatrix[lin][col]
+                decodedPacket[(num_linhas * num_colunas) * block_index + num_colunas * lin + col] = parityMatrix[lin][col]
 
         ##
         # Incrementar numero de bytes na saida.
@@ -290,8 +290,8 @@ totalInsertedErrorCount = 0
 ##
 # Leitura dos argumentos de linha de comando.
 ##
-# if len(sys.argv) != 6:
-#     help(sys.argv[0])
+if len(sys.argv) != 6:
+    help(sys.argv[0])
 
 packet_length = int(sys.argv[1])
 reps = int(sys.argv[2])
