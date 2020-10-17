@@ -103,7 +103,7 @@ def decode_packet(transmittedPacket, num_linhas, num_colunas):
         ##
         for lin in range(num_linhas):
             for col in range(num_colunas):
-                parityMatrix[lin][col] = transmittedPacket[block_offset + num_linhas * lin + col]
+                parityMatrix[lin][col] = transmittedPacket[block_offset + num_colunas * lin + col]
 
         ##
         # Bits de paridade das colunas.
@@ -164,7 +164,7 @@ def decode_packet(transmittedPacket, num_linhas, num_colunas):
         ##
         for lin in range(num_linhas):
             for col in range(num_colunas):
-                decodedPacket[(num_linhas * num_colunas) * block_index + num_linhas * lin + col] = parityMatrix[lin][col]
+                decodedPacket[(num_linhas * num_colunas) * block_index + num_colunas * lin + col] = parityMatrix[lin][col]
 
         ##
         # Incrementar numero de bytes na saida.
