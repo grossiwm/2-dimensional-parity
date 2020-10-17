@@ -94,7 +94,7 @@ def decode_packet(transmittedPacket, num_linhas, num_colunas):
     block_index = 0 # Contador de bytes no pacote decodificado.
 
     ##
-    # Itera por cada sequencia de 14 bits (8 de dados + 6 de paridade).
+    # Itera por cada sequencia de bits de dados + bits de paridade.
     ##
     for block_offset in range(0, len(transmittedPacket), (num_linhas * num_colunas + num_linhas + num_colunas)):
 
