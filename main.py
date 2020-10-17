@@ -290,8 +290,8 @@ totalInsertedErrorCount = 0
 ##
 # Leitura dos argumentos de linha de comando.
 ##
-# if len(sys.argv) != 6:
-#     help(sys.argv[0])
+if len(sys.argv) != 6:
+    help(sys.argv[0])
 
 packet_length = int(sys.argv[1])
 reps = int(sys.argv[2])
