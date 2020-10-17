@@ -5,7 +5,6 @@ class Gerador:
     def __init__(self):
         pass
 
-
     @staticmethod
     def variable_length(size_data, error_data):
         fig, ax = plt.subplots()

@@ -344,11 +344,11 @@ for i in range(reps):
         totalPacketErrorCount = totalPacketErrorCount + 1
 
 print('Numero de transmissoes simuladas: {0:d}\n'.format(reps))
-print('Numero de bits transmitidos: {0:d}'.format(reps * len(codedPacket)))
+print('Numero de bits transmitidos: {0:d}'.format(reps * packet_length * 8))
 print('Numero de bits errados inseridos: {0:d}\n'.format(totalInsertedErrorCount))
 print('Taxa de erro de bits (antes da decodificacao): {0:.2f}%'.format((float(totalInsertedErrorCount) / float(reps * len(codedPacket))) * 100.0))
 print('Numero de bits corrompidos apos decodificacao: {0:d}'.format(totalBitErrorCount))
-print('Taxa de erro de bits (apos decodificacao): {0:.2f}%\n'.format(float(totalBitErrorCount) / float(reps * len(codedPacket)) * 100.0))
+print('Taxa de erro de bits (apos decodificacao): {0:.2f}%\n'.format(float(totalBitErrorCount) / float(reps * packet_length * 8) * 100.0))
 print('Numero de pacotes corrompidos: {0:d}'.format(totalPacketErrorCount))
 print('Taxa de erro de pacotes: {0:.2f}%'.format(float(totalPacketErrorCount) / float(reps) * 100.0))
 print(f'\nTempo total de execucao: {str(time.time() - start_time)[:4]}s')
