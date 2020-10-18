@@ -27,20 +27,26 @@ def code_packet(originalPacket, num_linhas, num_colunas):
     # Itera por cada bloco do pacote original. O bloco possui o tamanho
     # da quantidade de bits do pacote que cabem na matriz de paridade.
     ##
-    for block in range(len(originalPacket) // (num_linhas * num_colunas)):
+    for block in range(math.ceil(len(originalPacket) / (num_linhas * num_colunas))):
 
         ##
         # Bits do i-esimo bloco sao dispostos na matriz.
         ##
         for lin in range(num_linhas):
             for col in range(num_colunas):
-                parity_matrix[lin][col] = originalPacket[block * (num_linhas * num_colunas) + num_colunas * lin + col]
+                try:
+                    parity_matrix[lin][col] = originalPacket[block * (num_linhas * num_colunas) + num_colunas * lin + col]
+                except:
+                    pass
 
         ##
         # Replicacao dos bits de dados no pacote codificado.
         ##
         for mat_index in range(num_linhas * num_colunas):
-            codedPacket[block * (num_linhas * num_colunas + num_linhas + num_colunas) + mat_index] = originalPacket[block * (num_linhas * num_colunas) + mat_index]
+            try:
+                codedPacket[block * (num_linhas * num_colunas + num_linhas + num_colunas) + mat_index] = originalPacket[block * (num_linhas * num_colunas) + mat_index]
+            except:
+                pass
 
         ##
         # Calculo dos bits de paridade, que sao colocados
@@ -311,5 +317,6 @@ num_colunas = int(sys.argv[5])
 originalPacket = generateRandomPacket(packet_length)
 codedPacket = code_packet(originalPacket, num_linhas, num_colunas)
 
+print(originalPacket)
 print(codedPacket)
 
