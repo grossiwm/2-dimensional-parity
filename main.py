@@ -1,24 +1,14 @@
 import random
 import math
 import sys
-
-#########
-# Implementacao um esquema sem qualquer metodo de codificao.
-#
-# Cada byte do pacote original eh mapeado para o mesmo byte no pacote
-# codificado.
-########
 import time
 
 
+##
+# Retorna uma matriz de zeros com a dimensão especificada nos parâmetros
+##
 def generate_parity_matrix(num_linhas, num_colunas):
     return [[0 for coluna in range(num_colunas)] for linha in range(num_linhas)]
-
-###
-##
-# Funcoes a serem alteradas!
-##
-###
 
 ##
 # Codifica o pacote de entrada, gerando um pacote
@@ -34,12 +24,13 @@ def code_packet(originalPacket, num_linhas, num_colunas):
     codedPacket = [0 for indice in range(codedLen)]
 
     ##
-    # Itera por cada byte do pacote original.
+    # Itera por cada bloco do pacote original. O bloco possui o tamanho
+    # da quantidade de bits do pacote que cabem na matriz de paridade.
     ##
     for block in range(len(originalPacket) // (num_linhas * num_colunas)):
 
         ##
-        # Bits do i-esimo byte sao dispostos na matriz.
+        # Bits do i-esimo bloco sao dispostos na matriz.
         ##
         for lin in range(num_linhas):
             for col in range(num_colunas):
@@ -91,7 +82,7 @@ def decode_packet(transmittedPacket, num_linhas, num_colunas):
     parityRows = [0 for linha in range(num_linhas)]
     decodedPacket = [0 for i in range(len(transmittedPacket))]
 
-    block_index = 0 # Contador de bytes no pacote decodificado.
+    block_index = 0 # Contador de blocos no pacote decodificado.
 
     ##
     # Itera por cada sequencia de bits de dados + bits de paridade.
@@ -187,12 +178,14 @@ def decode_packet(transmittedPacket, num_linhas, num_colunas):
 # especificado.
 ##
 def generateRandomPacket(length):
+
     return [random.randint(0,1) for x in range(8 * length)]
 
 ##
 # Gera um numero pseudo-aleatorio com distribuicao geometrica.
 ##
 def geomRand(p):
+
     uRand = 0
     while(uRand == 0):
         uRand = random.uniform(0, 1)
@@ -206,6 +199,7 @@ def geomRand(p):
 # Retorna o numero de erros inseridos no pacote e o pacote com erros.
 ##
 def insertErrors(codedPacket, errorProb):
+    
     i = -1
     n = 0 # Numero de erros inseridos no pacote.
 
@@ -244,6 +238,7 @@ def insertErrors(codedPacket, errorProb):
 # tamanho dos dois pacotes em bytes.
 ##
 def count_errors(originalPacket, decodedPacket):
+
     errors = 0
 
     for i in range(len(originalPacket)):
@@ -262,10 +257,10 @@ def help(selfName):
     sys.stderr.write("Onde:\n")
     sys.stderr.write("\t- <tam_pacote>: tamanho do pacote usado nas simulacoes (em bytes).\n")
     sys.stderr.write("\t- <reps>: numero de repeticoes da simulacao.\n")
-    sys.stderr.write("\t- <prob. erro>: probabilidade de erro de bits (i.e., probabilidade)\n")
+    sys.stderr.write("\t- <prob. erro>: probabilidade de erro de bits (i.e., probabilidade\n")
+    sys.stderr.write("\tde que um dado bit tenha seu valor alterado pelo canal.)\n")
     sys.stderr.write("\t- <n. lin>: número de linhas da matriz de paridade\n")
-    sys.stderr.write("\t- <prob. erro>: número de colunas da matriz de paridade\n")
-    sys.stderr.write("de que um dado bit tenha seu valor alterado pelo canal.)\n\n")
+    sys.stderr.write("\t- <n. col>: número de colunas da matriz de paridade\n\n")
 
     sys.exit(1)
 
@@ -340,6 +335,7 @@ for i in range(reps):
     bitErrorCount = count_errors(originalPacket, decodedPacket)
 
     if bitErrorCount > 0:
+        
         totalBitErrorCount = totalBitErrorCount + bitErrorCount
         totalPacketErrorCount = totalPacketErrorCount + 1
 
