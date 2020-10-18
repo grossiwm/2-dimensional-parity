@@ -357,6 +357,7 @@ def main_program(packet_length, reps, errorProb, num_linhas, num_colunas):
     return totalInsertedErrorCount, totalBitErrorCount, taxaErroBitsAposDec, totalPacketErrorCount, taxaErroPacote, execTime
 
 
+### GERADOR DE TESTES ###
 matrix_lengths = [(4, 4), (6, 6), (8, 8)]
 packet_lengths = [100, 1000, 10000]
 error_probs = [0.00005, 0.0005, 0.005]
