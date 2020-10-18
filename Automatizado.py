@@ -361,13 +361,6 @@ matrix_lengths = [(4, 4), (6, 6), (8, 8)]
 packet_lengths = [100, 1000, 10000]
 error_probs = [0.00005, 0.0005, 0.005]
 
-# totalInsertedErrorCounts = []
-# totalBitErrorCounts = []
-# taxaErroBitsAposDecs = []
-# totalPacketErrorCounts = []
-# taxaErroPacotes = []
-# execTimes = []
-
 columns = ['Tamanho_Matriz', 'Tamanho_Pacote', 'Probabilidade_Erro', 'Bits_Errados_Inseridos',
                                   'Bits_Corrompidos_Apos_Dec', 'Taxa_Bits_Corrompidos_Apos_Dec', 'Pacotes_Corrompidos',
                                   'Taxa_Pacotes_Corrompidos', 'Tempo_Exec']
@@ -384,14 +377,7 @@ for matrix_length in matrix_lengths:
                                                totalBitErrorCount, taxaErroBitsAposDec, totalPacketErrorCount,
                                                taxaErroPacote, execTime], index=columns)).T
 
-            dataTable = pd.concat([dataTable, new_line], ignore_index = True)
-
-            # totalInsertedErrorCounts.append(totalInsertedErrorCount)
-            # totalBitErrorCounts.append(totalBitErrorCount)
-            # taxaErroBitsAposDecs.append(taxaErroBitsAposDec)
-            # totalPacketErrorCounts.append(totalPacketErrorCount)
-            # taxaErroPacotes.append(taxaErroPacote)
-            # execTimes.append(execTime)
+            dataTable = pd.concat([dataTable, new_line], ignore_index=True)
 
 print("### Tabela Final ###")
 print(dataTable)
