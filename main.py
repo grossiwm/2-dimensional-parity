@@ -27,20 +27,26 @@ def code_packet(originalPacket, num_linhas, num_colunas):
     # Itera por cada bloco do pacote original. O bloco possui o tamanho
     # da quantidade de bits do pacote que cabem na matriz de paridade.
     ##
-    for block in range(len(originalPacket) // (num_linhas * num_colunas)):
+    for block in range(math.ceil(len(originalPacket) / (num_linhas * num_colunas))):
 
         ##
         # Bits do i-esimo bloco sao dispostos na matriz.
         ##
         for lin in range(num_linhas):
             for col in range(num_colunas):
-                parity_matrix[lin][col] = originalPacket[block * (num_linhas * num_colunas) + num_colunas * lin + col]
+                try:
+                    parity_matrix[lin][col] = originalPacket[block * (num_linhas * num_colunas) + num_colunas * lin + col]
+                except:
+                    parity_matrix[lin][col] = 0
 
         ##
         # Replicacao dos bits de dados no pacote codificado.
         ##
         for mat_index in range(num_linhas * num_colunas):
-            codedPacket[block * (num_linhas * num_colunas + num_linhas + num_colunas) + mat_index] = originalPacket[block * (num_linhas * num_colunas) + mat_index]
+            try:
+                codedPacket[block * (num_linhas * num_colunas + num_linhas + num_colunas) + mat_index] = originalPacket[block * (num_linhas * num_colunas) + mat_index]
+            except:
+                codedPacket[block * (num_linhas * num_colunas + num_linhas + num_colunas) + mat_index] = 0
 
         ##
         # Calculo dos bits de paridade, que sao colocados
@@ -78,9 +84,9 @@ def code_packet(originalPacket, num_linhas, num_colunas):
 ##
 def decode_packet(transmittedPacket, num_linhas, num_colunas):
     parityMatrix = generate_parity_matrix(num_linhas, num_colunas)
-    parityColumns = [0 for coluna in range(num_colunas)]
-    parityRows = [0 for linha in range(num_linhas)]
-    decodedPacket = [0 for i in range(len(transmittedPacket))]
+    parityColumns = [0] * num_colunas
+    parityRows = [0] * num_linhas
+    decodedPacket = [0] * int(len(transmittedPacket) / (num_linhas * num_colunas + num_linhas + num_colunas) * (num_linhas * num_colunas))
 
     block_index = 0 # Contador de blocos no pacote decodificado.
 
@@ -143,7 +149,7 @@ def decode_packet(transmittedPacket, num_linhas, num_colunas):
         ##
         # Se algum erro foi encontrado, corrigir.
         ##
-        if errorInRow > -1 and errorInColumn > -1:
+        if errorInRow != -1 and errorInColumn != -1:
 
             if parityMatrix[errorInRow][errorInColumn] == 1:
                 parityMatrix[errorInRow][errorInColumn] = 0
