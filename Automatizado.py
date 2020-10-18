@@ -368,9 +368,11 @@ error_probs = [0.00005, 0.0005, 0.005]
 # taxaErroPacotes = []
 # execTimes = []
 
-dataTable = pd.DataFrame(columns=['Tamanho_Matriz', 'Tamanho_Pacote', 'Probabilidade_Erro', 'Bits_Errados_Inseridos',
+columns = ['Tamanho_Matriz', 'Tamanho_Pacote', 'Probabilidade_Erro', 'Bits_Errados_Inseridos',
                                   'Bits_Corrompidos_Apos_Dec', 'Taxa_Bits_Corrompidos_Apos_Dec', 'Pacotes_Corrompidos',
-                                  'Taxa_Pacotes_Corrompidos', 'Tempo_Exec'])
+                                  'Taxa_Pacotes_Corrompidos', 'Tempo_Exec']
+
+dataTable = pd.DataFrame(columns=columns)
 
 for matrix_length in matrix_lengths:
     for packet_length in packet_lengths:
@@ -380,9 +382,9 @@ for matrix_length in matrix_lengths:
 
             new_line = pd.DataFrame(pd.Series([matrix_length, packet_length, error_prob, totalInsertedErrorCount,
                                                totalBitErrorCount, taxaErroBitsAposDec, totalPacketErrorCount,
-                                               taxaErroPacote, execTime])).T
+                                               taxaErroPacote, execTime], index=columns)).T
 
-            dataTable = pd.concat([dataTable, new_line])
+            dataTable = pd.concat([dataTable, new_line], ignore_index = True)
 
             # totalInsertedErrorCounts.append(totalInsertedErrorCount)
             # totalBitErrorCounts.append(totalBitErrorCount)
@@ -393,7 +395,4 @@ for matrix_length in matrix_lengths:
 
 print("### Tabela Final ###")
 print(dataTable)
-dataTable.to_csv(os.getcwd())
-
-
-
+dataTable.to_csv("{}\\dados.csv".format(os.getcwd()))
