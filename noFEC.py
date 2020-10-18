@@ -103,7 +103,8 @@ def insertErrors(codedPacket, errorProb):
 ##
 # Conta o numero de bits errados no pacote
 # decodificado usando como referencia
-# o pacote original. O parametro packetLength especifica o
+# o pacote original. O parametro packet_l
+#ength especifica o
 # tamanho dos dois pacotes em bytes.
 ##
 def countErrors(originalPacket, decodedPacket):
@@ -155,12 +156,12 @@ totalInsertedErrorCount = 0
 if len(sys.argv) != 4:
     help(sys.argv[0])
 
-packetLength = int(sys.argv[1])
+packet_length = int(sys.argv[1])
 reps = int(sys.argv[2])
 errorProb = float(sys.argv[3])
 
-if packetLength <= 0 or reps <= 0 or errorProb < 0 or errorProb > 1:
-    help(argv[0])
+if packet_length <= 0 or reps <= 0 or errorProb < 0 or errorProb > 1:
+    help(sys.argv[0])
 
 ##
 # Inicializacao da semente do gerador de numeros
@@ -172,7 +173,7 @@ random.seed()
 # Geracao do pacote original aleatorio.
 ##
 
-originalPacket = generateRandomPacket(packetLength)
+originalPacket = generateRandomPacket(packet_length)
 codedPacket = codePacket(originalPacket)
 
 ##
@@ -202,10 +203,10 @@ for i in range(reps):
         totalPacketErrorCount = totalPacketErrorCount + 1
 
 print('Numero de transmissoes simuladas: {0:d}\n'.format(reps))
-print('Numero de bits transmitidos: {0:d}'.format(reps * packetLength * 8))
+print('Numero de bits transmitidos: {0:d}'.format(reps * packet_length * 8))
 print('Numero de bits errados inseridos: {0:d}\n'.format(totalInsertedErrorCount))
 print('Taxa de erro de bits (antes da decodificacao): {0:.2f}%'.format(float(totalInsertedErrorCount) / float(reps * len(codedPacket)) * 100.0))
 print('Numero de bits corrompidos apos decodificacao: {0:d}'.format(totalBitErrorCount))
-print('Taxa de erro de bits (apos decodificacao): {0:.2f}%\n'.format(float(totalBitErrorCount) / float(reps * packetLength * 8) * 100.0))
+print('Taxa de erro de bits (apos decodificacao): {0:.2f}%\n'.format(float(totalBitErrorCount) / float(reps * packet_length * 8) * 100.0))
 print('Numero de pacotes corrompidos: {0:d}'.format(totalPacketErrorCount))
 print('Taxa de erro de pacotes: {0:.2f}%'.format(float(totalPacketErrorCount) / float(reps) * 100.0))

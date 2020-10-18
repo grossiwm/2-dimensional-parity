@@ -1,6 +1,9 @@
 import random
 import math
 import sys
+import os
+
+import pandas as pd
 
 #########
 # Implementacao um esquema sem qualquer metodo de codificao.
@@ -333,7 +336,7 @@ def main_program(packet_length, reps, errorProb, num_linhas, num_colunas):
             totalPacketErrorCount = totalPacketErrorCount + 1
 
     taxaErroBitsAposDec = float(totalBitErrorCount) / float(reps * packet_length * 8) * 100.0
-    taxaErroPacotes = float(totalPacketErrorCount) / float(reps) * 100.0
+    taxaErroPacote = float(totalPacketErrorCount) / float(reps) * 100.0
 
     print("####################################################################\n")
     print("\n\n### {}x{} - {} - {} ###\n".format(num_linhas, num_colunas, packet_length, errorProb))
@@ -345,19 +348,52 @@ def main_program(packet_length, reps, errorProb, num_linhas, num_colunas):
     print('Numero de bits corrompidos apos decodificacao: {0:d}'.format(totalBitErrorCount))
     print('Taxa de erro de bits (apos decodificacao): {0:.2f}%\n'.format(taxaErroBitsAposDec))
     print('Numero de pacotes corrompidos: {0:d}'.format(totalPacketErrorCount))
-    print('Taxa de erro de pacotes: {0:.2f}%'.format(taxaErroPacotes))
-    print(f'\nTempo total de execucao: {str(time.time() - start_time)[:4]}s')
+    print('Taxa de erro de pacotes: {0:.2f}%'.format(taxaErroPacote))
+    execTime = str(time.time() - start_time)[:4]
+    print(f'\nTempo total de execucao: {execTime}s')
 
     print("\n####################################################################\n")
 
-    return totalInsertedErrorCount, totalBitErrorCount, taxaErroBitsAposDec, totalPacketErrorCount, taxaErroPacotes
+    return totalInsertedErrorCount, totalBitErrorCount, taxaErroBitsAposDec, totalPacketErrorCount, taxaErroPacote, execTime
 
 
-matrix_lengths = [(4, 8), (4, 4), (5, 2)]
+matrix_lengths = [(4, 4), (6, 6), (8, 8)]
 packet_lengths = [100, 1000, 10000]
-error_props = [0.00005, 0.0005, 0.005]
+error_probs = [0.00005, 0.0005, 0.005]
+
+# totalInsertedErrorCounts = []
+# totalBitErrorCounts = []
+# taxaErroBitsAposDecs = []
+# totalPacketErrorCounts = []
+# taxaErroPacotes = []
+# execTimes = []
+
+dataTable = pd.DataFrame(columns=['Tamanho_Matriz', 'Tamanho_Pacote', 'Probabilidade_Erro', 'Bits_Errados_Inseridos',
+                                  'Bits_Corrompidos_Apos_Dec', 'Taxa_Bits_Corrompidos_Apos_Dec', 'Pacotes_Corrompidos',
+                                  'Taxa_Pacotes_Corrompidos', 'Tempo_Exec'])
 
 for matrix_length in matrix_lengths:
     for packet_length in packet_lengths:
-        for error_prop in error_props:
-            totalInsertedErrorCount, totalBitErrorCount, taxaErroBitsAposDec, totalPacketErrorCount, taxaErroPacotes = main_program(packet_length, 1000, error_prop, matrix_length[0], matrix_length[1])
+        for error_prob in error_probs:
+            totalInsertedErrorCount, totalBitErrorCount, taxaErroBitsAposDec, totalPacketErrorCount, taxaErroPacote,\
+                execTime = main_program(packet_length, 1000, error_prob, matrix_length[0], matrix_length[1])
+
+            new_line = pd.DataFrame(pd.Series([matrix_length, packet_length, error_prob, totalInsertedErrorCount,
+                                               totalBitErrorCount, taxaErroBitsAposDec, totalPacketErrorCount,
+                                               taxaErroPacote, execTime])).T
+
+            dataTable = pd.concat([dataTable, new_line])
+
+            # totalInsertedErrorCounts.append(totalInsertedErrorCount)
+            # totalBitErrorCounts.append(totalBitErrorCount)
+            # taxaErroBitsAposDecs.append(taxaErroBitsAposDec)
+            # totalPacketErrorCounts.append(totalPacketErrorCount)
+            # taxaErroPacotes.append(taxaErroPacote)
+            # execTimes.append(execTime)
+
+print("### Tabela Final ###")
+print(dataTable)
+dataTable.to_csv(os.getcwd())
+
+
+
