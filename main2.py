@@ -285,8 +285,8 @@ totalInsertedErrorCount = 0
 ##
 # Leitura dos argumentos de linha de comando.
 ##
-if len(sys.argv) != 6:
-    help(sys.argv[0])
+# if len(sys.argv) != 6:
+#     help(sys.argv[0])
 
 packet_length = int(sys.argv[1])
 reps = int(sys.argv[2])
@@ -311,40 +311,5 @@ num_colunas = int(sys.argv[5])
 originalPacket = generateRandomPacket(packet_length)
 codedPacket = code_packet(originalPacket, num_linhas, num_colunas)
 
-start_time = time.time()
+print(codedPacket)
 
-##
-# Loop de repeticoes da simulacao.
-##
-for i in range(reps):
-
-    ##
-    # Gerar nova versao do pacote com erros aleatorios.
-    ##
-    insertedErrorCount, transmittedPacket = insertErrors(codedPacket, errorProb)
-    totalInsertedErrorCount = totalInsertedErrorCount + insertedErrorCount
-
-    ##
-    # Gerar versao decodificada do pacote.
-    ##
-    decodedPacket = decode_packet(transmittedPacket, num_linhas, num_colunas)
-
-    ##
-    # Contar erros.
-    ##
-    bitErrorCount = count_errors(originalPacket, decodedPacket)
-
-    if bitErrorCount > 0:
-        
-        totalBitErrorCount = totalBitErrorCount + bitErrorCount
-        totalPacketErrorCount = totalPacketErrorCount + 1
-
-print('Numero de transmissoes simuladas: {0:d}\n'.format(reps))
-print('Numero de bits transmitidos: {0:d}'.format(reps * packet_length * 8))
-print('Numero de bits errados inseridos: {0:d}\n'.format(totalInsertedErrorCount))
-print('Taxa de erro de bits (antes da decodificacao): {0:.2f}%'.format((float(totalInsertedErrorCount) / float(reps * len(codedPacket))) * 100.0))
-print('Numero de bits corrompidos apos decodificacao: {0:d}'.format(totalBitErrorCount))
-print('Taxa de erro de bits (apos decodificacao): {0:.2f}%\n'.format(float(totalBitErrorCount) / float(reps * packet_length * 8) * 100.0))
-print('Numero de pacotes corrompidos: {0:d}'.format(totalPacketErrorCount))
-print('Taxa de erro de pacotes: {0:.2f}%'.format(float(totalPacketErrorCount) / float(reps) * 100.0))
-print(f'\nTempo total de execucao: {str(time.time() - start_time)[:4]}s')
